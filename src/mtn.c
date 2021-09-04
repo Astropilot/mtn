@@ -2408,7 +2408,9 @@ make_thumbnail(char *file)
     }
 
     // Open video file
-    ret = avformat_open_input(&pFormatCtx, file, NULL, NULL);
+    AVDictionary *d = NULL;
+    av_dict_set(&d, "protocol_whitelist", "file,crypto,data,http,https,tcp,tls", 0);
+    ret = avformat_open_input(&pFormatCtx, file, NULL, &d);
     if (0 != ret) {
         av_log(NULL, AV_LOG_ERROR, "\n%s: avformat_open_input %s failed: %d\n", gb_argv0, file, ret);
         goto cleanup;
